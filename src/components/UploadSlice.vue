@@ -6,7 +6,7 @@
     <el-upload
       ref="hub-upload-slice"
       :disabled="(upLoading && !multiple) || disabled"
-      :action="actionMerge"
+      action=""
       :accept="accept"
       :limit="limit"
       :size="size"
@@ -152,10 +152,6 @@ export default {
   name: 'HubUploadSlice',
   props: {
     action: {
-      type: String,
-      default: ''
-    },
-    actionMerge: {
       type: String,
       default: ''
     },
@@ -327,8 +323,8 @@ export default {
       file.chunks = this._genChunks(chunks)
       // 初始化进度条
       this.inFileList.push(file)
-      // 上传切片
-      this.uploadChunks(file.uid)
+      // 开始上传
+      this.uploadSlice(file.uid)
       this.onChange(file, this.inFileList)
     },
     // 文件切片
@@ -374,15 +370,12 @@ export default {
     _genChunks(chunks, uploadedList) {
       return chunks.map((c, index) => {
         // hash+序号，作为切片名称
-        const name = this.hash + '_' + index
         return {
-          hash: this.hash,
-          name,
           index,
           originFilename: c.originFilename,
           file: c.file,
           progress: uploadedList
-            ? uploadedList.indexOf(name) !== -1
+            ? uploadedList.indexOf(index) !== -1
               ? 100
               : 0
             : 0
@@ -390,7 +383,7 @@ export default {
       })
     },
     // 上传切片
-    async uploadChunks(uid) {
+    async uploadSlice(uid) {
       // 预请求
       await this.preRequest(uid)
       // 上传切片
@@ -421,7 +414,7 @@ export default {
     _genRequest(uploadData, uid) {
       const file = this.getCurrentFile(uid)
       const chunks = this.getCurrentChunks(uid)
-      return uploadData.map(({ form, index }) => {
+      return uploadData.map((form, index) => {
         const options = {
           headers: this.$attrs.headers,
           file: file,
