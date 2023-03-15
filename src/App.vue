@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <UploadSlice />
+    <HelloWorld />
   </div>
 </template>
 
 <script>
-import UploadSlice from './components/UploadSlice.vue'
+import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    UploadSlice
+    HelloWorld
   }
 }
 </script>
