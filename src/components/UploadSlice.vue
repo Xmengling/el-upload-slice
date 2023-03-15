@@ -85,7 +85,7 @@
           <div class="name">{{ item.name }}</div>
           <div>
             <!-- 进度条 -->
-            <div class="progress-text-wrap">
+            <div v-if="upLoading" class="progress-text-wrap">
               <div class="name">{{ item.totalProgress || 0 }}%</div>
               <!-- 取消上传 -->
               <div v-if="cancelable" class="cancel" @click="abortFile(item)">
